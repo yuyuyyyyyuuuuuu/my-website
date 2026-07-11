@@ -1,0 +1,644 @@
+/* ========== 基础与变量 ========== */
+:root {
+    /* 多元日系配色 - 低饱和为主 */
+    --bg-deep: #1a1625;
+    --bg-mid: #252035;
+    --bg-light: #2d2640;
+    
+    /* 主色调 - 幸运星粉 */
+    --pink-soft: #e8a4c8;
+    --pink-mid: #d484b0;
+    --pink-deep: #c06898;
+    
+    /* 点缀色 */
+    --mint: #a8d5ba;
+    --lavender: #b8a8d8;
+    --peach: #f0c8a8;
+    --sky: #a8c8e8;
+    --coral: #e8a8a0;
+    
+    /* 文字 */
+    --text-primary: #f0e8f0;
+    --text-secondary: #a098b0;
+    --text-muted: #706880;
+    
+    /* 几何装饰色 */
+    --geo-pink: rgba(232, 164, 200, 0.15);
+    --geo-mint: rgba(168, 213, 186, 0.12);
+    --geo-lavender: rgba(184, 168, 216, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+/* ========== 烟花画布 ========== */
+#fireworks-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ========== 几何装饰层 ========== */
+.geo-decor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* 三角形 */
+.geo-triangle {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+.geo-t1 {
+    top: 15%;
+    right: 8%;
+    border-width: 0 30px 52px 30px;
+    border-color: transparent transparent var(--geo-pink) transparent;
+    animation: float-slow 8s ease-in-out infinite;
+}
+
+.geo-t2 {
+    bottom: 20%;
+    left: 5%;
+    border-width: 0 20px 35px 20px;
+    border-color: transparent transparent var(--geo-mint) transparent;
+    animation: float-slow 10s ease-in-out infinite reverse;
+}
+
+/* 菱形 */
+.geo-diamond {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    transform: rotate(45deg);
+}
+
+.geo-d1 {
+    top: 25%;
+    left: 12%;
+    background: var(--geo-lavender);
+    animation: rotate-slow 15s linear infinite;
+}
+
+.geo-d2 {
+    bottom: 30%;
+    right: 15%;
+    width: 25px;
+    height: 25px;
+    background: var(--geo-pink);
+    animation: rotate-slow 12s linear infinite reverse;
+}
+
+/* 波浪线 */
+.geo-wave {
+    position: absolute;
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--geo-mint), transparent);
+}
+
+.geo-w1 {
+    top: 40%;
+    left: 3%;
+    transform: rotate(-30deg);
+    animation: pulse 4s ease-in-out infinite;
+}
+
+.geo-w2 {
+    top: 60%;
+    right: 5%;
+    transform: rotate(30deg);
+    animation: pulse 5s ease-in-out infinite reverse;
+}
+
+/* 圆形 */
+.geo-circle {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid;
+}
+
+.geo-c1 {
+    top: 10%;
+    left: 20%;
+    width: 60px;
+    height: 60px;
+    border-color: var(--geo-pink);
+    animation: scale-pulse 6s ease-in-out infinite;
+}
+
+.geo-c2 {
+    bottom: 15%;
+    right: 25%;
+    width: 40px;
+    height: 40px;
+    border-color: var(--geo-lavender);
+    animation: scale-pulse 8s ease-in-out infinite reverse;
+}
+
+/* 线条 */
+.geo-line {
+    position: absolute;
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--geo-pink), transparent);
+}
+
+.geo-l1 {
+    top: 35%;
+    right: 20%;
+    transform: rotate(45deg);
+    animation: fade-slide 7s ease-in-out infinite;
+}
+
+.geo-l2 {
+    bottom: 40%;
+    left: 18%;
+    transform: rotate(-45deg);
+    animation: fade-slide 9s ease-in-out infinite reverse;
+}
+
+/* ========== 导航栏 ========== */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 0;
+    background: rgba(26, 22, 37, 0.7);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(232, 164, 200, 0.1);
+}
+
+.nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.logo-shape {
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 14px solid var(--pink-mid);
+    transform: rotate(-15deg);
+    transition: transform 0.3s ease;
+}
+
+.nav-logo:hover .logo-shape {
+    transform: rotate(15deg);
+}
+
+.logo-text {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--pink-soft);
+    letter-spacing: 2px;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 0;
+}
+
+.nav-links a {
+    display: block;
+    padding: 0 20px;
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 1px;
+    height: 60px;
+    line-height: 60px;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--pink-mid), var(--lavender));
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--pink-soft);
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+    width: 60%;
+}
+
+/* ========== 欢迎区域 ========== */
+.hero {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 20px 60px;
+}
+
+.hero-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    max-width: 600px;
+    width: 100%;
+}
+
+/* ========== 头像区域 ========== */
+.avatar-section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.avatar-frame {
+    position: relative;
+    width: 140px;
+    height: 140px;
+}
+
+.avatar-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    transition: all 0.4s ease;
+}
+
+.avatar-frame:hover .avatar-img {
+    width: 110px;
+    height: 110px;
+    filter: brightness(1.1);
+}
+
+/* 外环 - 六边形 */
+.avatar-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.ring-outer {
+    width: 130px;
+    height: 130px;
+    background: linear-gradient(135deg, var(--pink-soft), var(--lavender), var(--mint));
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    opacity: 0.6;
+    animation: ring-rotate 20s linear infinite;
+}
+
+.ring-inner {
+    width: 120px;
+    height: 120px;
+    background: var(--bg-deep);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+/* 装饰角 */
+.avatar-accent {
+    position: absolute;
+    top: -5px;
+    right: 15px;
+    width: 20px;
+    height: 20px;
+    background: var(--peach);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    opacity: 0.8;
+    animation: accent-bounce 3s ease-in-out infinite;
+}
+
+/* 头像周围装饰 */
+.avatar-decoration {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+}
+
+.deco-star { color: var(--pink-soft); animation: twinkle 2s ease-in-out infinite; }
+.deco-diamond { color: var(--mint); animation: twinkle 2s ease-in-out infinite 0.5s; }
+.deco-triangle { color: var(--lavender); animation: twinkle 2s ease-in-out infinite 1s; }
+
+/* ========== 文字区域 ========== */
+.text-section {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.greeting {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.greeting-line {
+    display: block;
+    width: 30px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--pink-mid));
+}
+
+.greeting-line:last-child {
+    background: linear-gradient(90deg, var(--pink-mid), transparent);
+}
+
+.greeting-text {
+    font-size: 0.75rem;
+    color: var(--pink-soft);
+    letter-spacing: 4px;
+    font-weight: 300;
+}
+
+.nickname {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.nick-char {
+    font-size: 1.2rem;
+    color: var(--pink-mid);
+    font-weight: 300;
+    opacity: 0.6;
+}
+
+.nick-main {
+    background: linear-gradient(135deg, var(--pink-soft), var(--lavender), var(--peach));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% 200%;
+    animation: gradient-shift 5s ease infinite;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+.sub-deco {
+    color: var(--pink-mid);
+    opacity: 0.5;
+    margin: 0 6px;
+}
+
+.tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+.tag {
+    padding: 4px 14px;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    background: rgba(232, 164, 200, 0.08);
+    border: 1px solid rgba(232, 164, 200, 0.15);
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.tag:hover {
+    background: rgba(232, 164, 200, 0.15);
+    border-color: rgba(232, 164, 200, 0.3);
+    color: var(--pink-soft);
+}
+
+/* 滚动提示 */
+.scroll-hint {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 30px;
+    text-decoration: none;
+    color: var(--text-muted);
+    transition: color 0.3s ease;
+}
+
+.scroll-hint:hover {
+    color: var(--pink-soft);
+}
+
+.scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--pink-mid), transparent);
+    animation: scroll-pulse 2s ease-in-out infinite;
+}
+
+.scroll-text {
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    font-weight: 300;
+}
+
+/* ========== 关于区域 ========== */
+.about {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-mid);
+    padding: 60px 20px;
+}
+
+.about-inner {
+    text-align: center;
+    max-width: 600px;
+}
+
+.section-title {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    letter-spacing: 4px;
+}
+
+.title-deco {
+    color: var(--pink-mid);
+    font-size: 0.8rem;
+    margin: 0 10px;
+    opacity: 0.6;
+}
+
+.about-text {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 300;
+    line-height: 2;
+}
+
+/* ========== 动画定义 ========== */
+@keyframes float-slow {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+@keyframes rotate-slow {
+    from { transform: rotate(45deg); }
+    to { transform: rotate(405deg); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+}
+
+@keyframes scale-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.3; }
+    50% { transform: scale(1.2); opacity: 0.6; }
+}
+
+@keyframes fade-slide {
+    0%, 100% { opacity: 0; transform: translateX(0) rotate(45deg); }
+    50% { opacity: 0.6; transform: translateX(10px) rotate(45deg); }
+}
+
+@keyframes ring-rotate {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes accent-bounce {
+    0%, 100% { transform: translateY(0) rotate(45deg); }
+    50% { transform: translateY(-8px) rotate(45deg); }
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes scroll-pulse {
+    0%, 100% { opacity: 0.3; height: 30px; }
+    50% { opacity: 1; height: 50px; }
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 768px) {
+    .nav-inner {
+        padding: 0 20px;
+    }
+    
+    .nav-links a {
+        padding: 0 12px;
+        font-size: 0.8rem;
+    }
+    
+    .hero-inner {
+        gap: 30px;
+    }
+    
+    .avatar-frame {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .avatar-img {
+        width: 85px;
+        height: 85px;
+    }
+    
+    .ring-outer {
+        width: 110px;
+        height: 110px;
+    }
+    
+    .ring-inner {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .nickname {
+        font-size: 1.5rem;
+    }
+    
+    .nick-char {
+        font-size: 1rem;
+    }
+}
